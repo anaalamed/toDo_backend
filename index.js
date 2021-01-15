@@ -1,2 +1,4 @@
 require('./todos-cmd');
-console.log('welcome to my todo app!');
+console.log('todos app is ready!');
+
+const [a,b,action,data] = process.argv;
