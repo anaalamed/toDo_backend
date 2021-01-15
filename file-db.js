@@ -1,1 +1,2 @@
-require('index.js');
+console.log('db is ready')
+

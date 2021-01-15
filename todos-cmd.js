@@ -1,2 +1,3 @@
-require('index.js');
+console.log('comands loaded')
+require('./todo-model')
 

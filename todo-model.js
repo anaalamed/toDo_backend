@@ -1,1 +1,2 @@
-require('index.js');
+require('./file-db')
+
