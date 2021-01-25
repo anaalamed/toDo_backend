@@ -1,12 +1,20 @@
 {
   "name": "todo",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anaalamed/toDo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anaalamed/toDo/issues"
+  },
+  "homepage": "https://github.com/anaalamed/toDo#readme",
+  "description": ""
 }
