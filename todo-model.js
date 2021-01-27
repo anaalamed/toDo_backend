@@ -3,9 +3,8 @@ const { getData, setData } = require('./file-db')
 
 const PATH = "todos.json";
 
-getData('todos.json').then(data => console.log(data));
 
-// ---- promise ----
+// ---------------- promise ----------------------
 // function addTodo(todo) {
 //     return getData(PATH)      // arr of todos
 //         .then(todos => {
@@ -16,17 +15,25 @@ getData('todos.json').then(data => console.log(data));
 // }
 
 
-// ---- async - await. like promise ----
+// ---- async - await. like promise ---------------
 async function addTodo(todo) {
     const todos = await getData(PATH);
+    console.log('before: ', todos);
+
     todos.push(todo);
     await setData(PATH, todos);
+
+    getData('todos.json').then(data => console.log('after: ', data));
 }
 
 
 async function removeTodo(id) {
     const todos = await getData(PATH);
+    console.log('before: ', todos);
+
     await setData(PATH, todos.filter(todo => todo.id !== id));
+
+    getData('todos.json').then(data => console.log('after: ', data));
 }
 
 /**
@@ -37,6 +44,7 @@ async function removeTodo(id) {
 async function updateTodo(id, changes = {}) {
     let todos = await getData(PATH);
     console.log('before: ', todos);
+
     let [todo] = todos.filter(todo => todo.id === id); // destructiring cause todos is array
     console.log('todo is: ', todo);
 
@@ -56,16 +64,17 @@ async function updateTodo(id, changes = {}) {
 async function getTodos(filters = {}) {
     let todos = await getData(PATH);
     console.log('before: ', todos);
+
     let new_todos;
 
     if (filters.id) {
-        new_todos = todos.filter(todo => todo.id === filters.id); // destructiring cause todos is array
+        new_todos = todos.filter(todo => todo.id === filters.id); 
     }
     if (filters.content) {
-        new_todos = todos.filter(todo => todo.content === filters.content); // destructiring cause todos is array
+        new_todos = todos.filter(todo => todo.content === filters.content); 
     }
     if (filters.isDone) {
-        new_todos = todos.filter(todo => todo.isDone === filters.isDone); // destructiring cause todos is array
+        new_todos = todos.filter(todo => todo.isDone == filters.isDone); 
     }
 
     await setData(PATH, new_todos);
@@ -81,16 +90,16 @@ module.exports = {
 //     {
 //         "id": 1,
 //         "content": "aaa",
-//         "isDone": "false"
+//         "isDone": false
 //     },
 //     {
 //         "id": 2,
 //         "content": "aaa",
-//         "isDone": "false"
+//         "isDone": false
 //     },
 //     {
 //         "id": 3,
 //         "content": "aaa",
-//         "isDone": "false"
+//         "isDone": false
 //     }
 // ]
