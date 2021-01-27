@@ -18,22 +18,23 @@ const PATH = "todos.json";
 // ---- async - await. like promise ---------------
 async function addTodo(todo) {
     const todos = await getData(PATH);
-    console.log('before: ', todos);
+    const newId = todos[todos.length-1].id + 1;
 
-    todos.push(todo);
+    const newTodo = {...todo, id: newId};
+    todos.push(newTodo);
     await setData(PATH, todos);
 
-    getData('todos.json').then(data => console.log('after: ', data));
+    return newTodo;
 }
 
 
 async function removeTodo(id) {
     const todos = await getData(PATH);
-    console.log('before: ', todos);
+    // console.log('before: ', todos);
 
     await setData(PATH, todos.filter(todo => todo.id !== id));
 
-    getData('todos.json').then(data => console.log('after: ', data));
+    // getData('todos.json').then(data => console.log('after: ', data));
 }
 
 /**
@@ -43,42 +44,57 @@ async function removeTodo(id) {
  */
 async function updateTodo(id, changes = {}) {
     let todos = await getData(PATH);
-    console.log('before: ', todos);
 
     let [todo] = todos.filter(todo => todo.id === id); // destructiring cause todos is array
-    console.log('todo is: ', todo);
 
-    if (changes.isDone) {
-        todo.isDone = changes.isDone;
-    }
-    if (changes.content) {
-        todo.content = changes.content;
-    }
+    // if (changes.isDone) {
+    //     todo.isDone = changes.isDone;
+    // }
+    // if (changes.content) {
+    //     todo.content = changes.content;
+    // }
+    // await setData(PATH, todos);
+    // return todo;
 
+    Object.assign(todo, changes); // assign. change the object
     await setData(PATH, todos);
-
-    getData('todos.json').then(data => console.log('after: ', data));
-
+    return todo;
 }
 
 async function getTodos(filters = {}) {
     let todos = await getData(PATH);
-    console.log('before: ', todos);
+    // console.log('before: ', todos);
 
-    let new_todos;
+    // let new_todos;
 
-    if (filters.id) {
-        new_todos = todos.filter(todo => todo.id === filters.id); 
-    }
-    if (filters.content) {
-        new_todos = todos.filter(todo => todo.content === filters.content); 
-    }
-    if (filters.isDone) {
-        new_todos = todos.filter(todo => todo.isDone == filters.isDone); 
-    }
+    // if (filters.id) {
+    //     new_todos = todos.filter(todo => todo.id === filters.id);
+    // }
+    // if (filters.content) {
+    //     new_todos = todos.filter(todo => todo.content === filters.content);
+    // }
+    // if (filters.isDone) {
+    //     new_todos = todos.filter(todo => todo.isDone == filters.isDone);
+    // }
+    // // await setData(PATH, new_todos);
+    // return new_todos;
 
-    await setData(PATH, new_todos);
-    getData('todos.json').then(data => console.log('after: ', data));
+    return todos.filter(todo => {
+        let result = true;
+        if ('isDone' in filters) {
+            result = result && (todo.isDone === filters.isDone);
+        }
+        if ('content' in filters) {
+            // result= result && todo.content.toLowerCase().include(filters.content.toLowerCase());
+            result = result && new RegExp(filters.content, 'i').test(todo.content);
+        }
+        if ('id' in filters) {
+            result = result && (todo.id === filters.id);
+        }
+
+        return result;
+    })
+
 }
 
 module.exports = {
