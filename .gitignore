@@ -1,4 +1,4 @@
-node-modules
 .idea
 .vscode
 todos.json
+node_modules/

@@ -1,4 +1,4 @@
-require('./file-db');
+// require('./file-db');
 const { getData, setData } = require('./file-db')
 
 const PATH = "todos.json";
@@ -30,11 +30,7 @@ async function addTodo(todo) {
 
 async function removeTodo(id) {
     const todos = await getData(PATH);
-    // console.log('before: ', todos);
-
-    await setData(PATH, todos.filter(todo => todo.id !== id));
-
-    // getData('todos.json').then(data => console.log('after: ', data));
+    await setData(PATH, todos.filter(todo =>  todo.id !== id));
 }
 
 /**
@@ -44,17 +40,7 @@ async function removeTodo(id) {
  */
 async function updateTodo(id, changes = {}) {
     let todos = await getData(PATH);
-
-    let [todo] = todos.filter(todo => todo.id === id); // destructiring cause todos is array
-
-    // if (changes.isDone) {
-    //     todo.isDone = changes.isDone;
-    // }
-    // if (changes.content) {
-    //     todo.content = changes.content;
-    // }
-    // await setData(PATH, todos);
-    // return todo;
+    const todo = todos.find(todo => todo.id === id)
 
     Object.assign(todo, changes); // assign. change the object
     await setData(PATH, todos);
@@ -63,21 +49,6 @@ async function updateTodo(id, changes = {}) {
 
 async function getTodos(filters = {}) {
     let todos = await getData(PATH);
-    // console.log('before: ', todos);
-
-    // let new_todos;
-
-    // if (filters.id) {
-    //     new_todos = todos.filter(todo => todo.id === filters.id);
-    // }
-    // if (filters.content) {
-    //     new_todos = todos.filter(todo => todo.content === filters.content);
-    // }
-    // if (filters.isDone) {
-    //     new_todos = todos.filter(todo => todo.isDone == filters.isDone);
-    // }
-    // // await setData(PATH, new_todos);
-    // return new_todos;
 
     return todos.filter(todo => {
         let result = true;
@@ -101,21 +72,3 @@ module.exports = {
     addTodo, removeTodo, updateTodo, getTodos
 }
 
-
-// [
-//     {
-//         "id": 1,
-//         "content": "aaa",
-//         "isDone": false
-//     },
-//     {
-//         "id": 2,
-//         "content": "aaa",
-//         "isDone": false
-//     },
-//     {
-//         "id": 3,
-//         "content": "aaa",
-//         "isDone": false
-//     }
-// ]
