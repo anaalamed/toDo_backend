@@ -1,10 +1,51 @@
 const express = require('express'); // from node_modules
+const model = require('./services/users-model');
+const bodyParser = require('body-parser');
+
 const app = express();  // create server
+// app.use(jsonParser = bodyParser.json());
+const jsonParser = bodyParser.json();
 
-const model  = require('./todo-model');
+// middleware example
+app.use((req, res, next) => {
+    if(req.headers.userId) {
+        req.userId = Number(req.headers.userId); // go to the next
+        next();
+    } else {
+        res.status(401).json({'please provide user header'});
+    }
+});
 
+app.use((req, res, next) => {
+    // 
+    req.user = await model.getUsers(req.userId);
+    if(req.user) {
+        next();
+    } else {
+        res.status(401).json({'User is not recognized'});
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+//_________________________________________________________
+// -----------------------todos methods -------------------
+//_________________________________________________________
+
+// print
 app.get('/api/todos', async (req, res) => {
-    const filters = {};
+    const filters = {
+        userId: req.user.id
+    };
+
     if (req.query.isDone) {
         filters.isDone = req.query.isDone === 'true';
     }
@@ -12,42 +53,54 @@ app.get('/api/todos', async (req, res) => {
         filters.content = req.query.content;
     }
 
-    const todos = await  model.getTodos(filters);
-    res.json( todos);
+    const todos = await model.getTodos(filters);
+    res.json(todos);
 });
 
 app.delete('/api/todos/:id', async (req, res) => {
     await model.removeTodo(Number(req.params.id));
-    res.json({message: 'item deleted successfuly'});
+    res.json({ message: 'item deleted successfuly' });
 });
 
 // add todo.       /api/todos?cont=a&extraData=done
-app.post('/api/todos', async (req, res) => {
+app.post('/api/todos', jsonParser, async (req, res) => {
+
+
     let content = req.query.cont;
     let isDone = req.query.extraData === 'done';
 
-    const todo = await model.addTodo({content, isDone});
-    res.json({message: 'item added successfuly'});
-
+    const todo = await model.addTodo({ content, isDone });
+    // res.json({message: 'item added successfuly'});
+    res.json(todo);
 });
 
 // update todo
-app.put('/api/todos/:id', async (req, res) => {
+app.put('/api/todos/:id', jsonParser, async (req, res) => {
     let id = Number(req.params.id);
 
     const changes = {};
     if (req.query.isDone) {
         changes.isDone = req.query.isDone === 'done';
     }
-    if (req.query.content) {
-        changes.content = req.query.content;
+    if (req.query.cont) {
+        changes.content = req.query.cont;
     }
 
     const todo = await model.updateTodo(id, changes);
-    res.json({message: 'item updated successfuly'});
+    // res.json({message: 'item updated successfuly'});
+    res.json(todo);
 });
 
+
 app.listen(3000, () => console.log('listening on http://localHost:3000'));
+
+
+
+
+
+
+
+
 
 
 
