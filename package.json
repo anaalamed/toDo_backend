@@ -10,7 +10,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anaalamed/toDo.git"
+    "url": "git+https://github.com/anaalamed/toDo_backend.git"
   },
   "bugs": {
     "url": "https://github.com/anaalamed/toDo/issues"
