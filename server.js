@@ -1,43 +1,27 @@
 const express = require('express'); // from node_modules
-const model = require('./services/users-model');
 const bodyParser = require('body-parser');
 
+const jsonParser = bodyParser.json();  // access to body and JSON it 
+
+const modelTodo = require('./models/todos');
+// const modelUsers = require('./models/users');
+const {checkUsersHeaders, checkExistingUser} = require('./middlewares/auth');
+const {CheckTodoPermission} = require('./middlewares/todos');
+
+
 const app = express();  // create server
-// app.use(jsonParser = bodyParser.json());
-const jsonParser = bodyParser.json();
-
-// middleware example
-app.use((req, res, next) => {
-    if(req.headers.userId) {
-        req.userId = Number(req.headers.userId); // go to the next
-        next();
-    } else {
-        res.status(401).json({'please provide user header'});
-    }
-});
-
-app.use((req, res, next) => {
-    // 
-    req.user = await model.getUsers(req.userId);
-    if(req.user) {
-        next();
-    } else {
-        res.status(401).json({'User is not recognized'});
-    }
-});
-
-
-
-
-
-
-
-
-
 
 
 //_________________________________________________________
-// -----------------------todos methods -------------------
+// ----------------------- middlewares --------------------
+//_________________________________________________________
+
+app.use(checkUsersHeaders); // if there is userId in headers
+app.use(checkExistingUser); // if there is user in db
+
+
+//_________________________________________________________
+// ----------------------- todos methods ------------------
 //_________________________________________________________
 
 // print
@@ -53,41 +37,29 @@ app.get('/api/todos', async (req, res) => {
         filters.content = req.query.content;
     }
 
-    const todos = await model.getTodos(filters);
+    const todos = await modelTodo.getTodos(filters);
+    // const todos = await modelTodo.getTodos();
+
     res.json(todos);
 });
 
-app.delete('/api/todos/:id', async (req, res) => {
-    await model.removeTodo(Number(req.params.id));
+// before delete and put: middleware check if user have permission
+app.delete('/api/todos/:id', CheckTodoPermission, async (req, res) => {
+    // await modelTodo.removeTodo(Number(req.params.id));
+    await modelTodo.removeTodo(req.todo.id);
+
     res.json({ message: 'item deleted successfuly' });
 });
 
-// add todo.       /api/todos?cont=a&extraData=done
+// add todo.       
 app.post('/api/todos', jsonParser, async (req, res) => {
-
-
-    let content = req.query.cont;
-    let isDone = req.query.extraData === 'done';
-
-    const todo = await model.addTodo({ content, isDone });
-    // res.json({message: 'item added successfuly'});
+    const todo = await modelTodo.addTodo({...req.body, isDone:false, userId: req.user.id});
     res.json(todo);
 });
 
 // update todo
-app.put('/api/todos/:id', jsonParser, async (req, res) => {
-    let id = Number(req.params.id);
-
-    const changes = {};
-    if (req.query.isDone) {
-        changes.isDone = req.query.isDone === 'done';
-    }
-    if (req.query.cont) {
-        changes.content = req.query.cont;
-    }
-
-    const todo = await model.updateTodo(id, changes);
-    // res.json({message: 'item updated successfuly'});
+app.put('/api/todos/:id', CheckTodoPermission, jsonParser, async (req, res) => {
+    const todo = await modelTodo.updateTodo(req.todo.id, req.body); // Number(req.params.id)
     res.json(todo);
 });
 

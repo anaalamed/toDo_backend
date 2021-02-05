@@ -1,5 +1,5 @@
 // require('./file-db');
-const { getData, setData } = require('./file-db')
+const { getData, setData } = require('../file-db')
 
 const PATH = "todos.json";
 
@@ -18,19 +18,18 @@ const PATH = "todos.json";
 // ---- async - await. like promise ---------------
 async function addTodo(todo) {
     const todos = await getData(PATH);
-    const newId = todos[todos.length-1].id + 1;
+    const newId = todos[todos.length - 1].id + 1;
 
-    const newTodo = {...todo, id: newId};
+    const newTodo = { ...todo, id: newId };
     todos.push(newTodo);
     await setData(PATH, todos);
 
     return newTodo;
 }
 
-
 async function removeTodo(id) {
     const todos = await getData(PATH);
-    await setData(PATH, todos.filter(todo =>  todo.id !== id));
+    await setData(PATH, todos.filter(todo => todo.id !== id));
 }
 
 /**
@@ -62,13 +61,23 @@ async function getTodos(filters = {}) {
         if ('id' in filters) {
             result = result && (todo.id === filters.id);
         }
+        if ('userId' in filters) {
+            result = result && (todo.userId === filters.userId);
+        }
 
         return result;
     })
 
 }
 
+async function getTodo(id) {
+    let todos = await getData(PATH);
+    return todos.filter(todo => todo.id === id);
+}
+
+
+
 module.exports = {
-    addTodo, removeTodo, updateTodo, getTodos
+    addTodo, removeTodo, updateTodo, getTodos, getTodo
 }
 

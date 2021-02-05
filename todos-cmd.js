@@ -1,7 +1,7 @@
 // know to read arguments from terminal and decide what func start
 
 // const { addTodo, removeTodo, updateTodo, getTodos } = require('./todo-model');
-const model  = require('./todo-model');
+const model  = require('./services/todo-model');
 
 
 module.exports = async function runCommand([_, __, action, data = '', extraData]) {

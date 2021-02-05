@@ -17,11 +17,7 @@ async function removeUser(id) {
     const users = await getData(PATH);
     await setData(PATH, users.filter(user =>  user.id !== id));
 }
-/**
- * 
- * @param {int} id 
- * @param {obj} changes 
- */
+
 async function updateUser(id, changes = {}) {
     let users = await getData(PATH);
     const user = users.find(user => user.id === id)
@@ -33,7 +29,6 @@ async function updateUser(id, changes = {}) {
 
 async function getUsers(id) {
     let users = await getData(PATH);
-
     return users.find(user => user.id === id);
 }
 
