@@ -1,0 +1,114 @@
+body {
+  background-color: rgb(171, 212, 238);
+}
+
+.container {
+  width: 900px;
+  margin: 0 auto;
+  border: 3px solid midnightblue;
+  background-color: moccasin;
+}
+
+.sign_in{
+  width: 500px;
+  /* display: flex;
+  flex-direction: column; */
+  /* align-content: center; */
+}
+
+h1 {
+  color: midnightblue;
+  padding-left: 20px;
+  font-size: 50px;
+  text-align: center;
+}
+
+label {
+  margin-left: 20px;
+  font-size: 20px;
+  color: midnightblue;
+}
+
+input {
+  width: 400px;
+  height: 30px;
+  border: 3px solid midnightblue;
+  padding-left: 10px;
+}
+
+.sign_in form {
+  margin-left: 10px;
+}
+.sign_in input {
+  margin-bottom: 10px;
+  width: 250px;
+}
+
+.sign_in button {
+  margin: 10px;
+  margin-left: 370px;
+}
+
+.submit {
+  height: 38px;
+  width: 100px;
+  background-color: midnightblue;
+  border: 2px solid midnightblue;
+  color: white;
+}
+
+section {
+  display: flex;
+}
+
+div {
+  flex: 1;
+}
+
+ul {
+  list-style: none;
+}
+ li {
+   padding: 5px;
+ }
+
+ li:hover {
+  border: 1px solid midnightblue;
+}
+
+.buttons {
+  display: none;
+}
+
+li:hover .buttons {
+  display: inline;
+  cursor: pointer;
+}
+
+button {
+  background-color: moccasin;
+  color: midnightblue;
+  border: none;
+  font-size: 25px;
+}
+
+button:hover {
+  color: aqua;
+}
+
+h2 {
+  font-size: 40px;
+  color: midnightblue;
+  padding-left: 20px;
+}
+
+ul li {
+  font-size: 30px;
+  color: midnightblue;
+  cursor: pointer;
+}
+
+p {
+  width: 900px;
+  margin: 0 auto;
+}

@@ -23,17 +23,5 @@ module.exports = {
 }
 
 
-// --------------------------------------------------------//
-// to print to terminal 
-// getData('todos.json').then(data => console.log(data));
-
-// in terminal
-// let todos =[];
-// getData('todos.json').then(list => todos = list);
-// todos.push({id: 2, content: 'my third'});
-// setData('todos.json', todos);
-// getData('todos.json').then(data => console.log(data));
-
-
 
 

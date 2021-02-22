@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="src/styles.css">
+    <link rel="stylesheet" href="src/style.css">
+
+</head>
+
+<body>
+    <!-- ----------------------------------------------------- -->
+    <!-- sign in  -->
+    <div class="container sign_in">
+        <h1>Please sign in</h1>
+        <form>
+            <label for="email">Email: </label><input type="email"><br>
+
+            <label for="password">Password: </label><input type="password"><br>
+            <button class="submit">Sign in</button>
+        </form>
+    </div>
+    <!-- ----------------------------------------------------- -->
+
+    <br>
+    <br>
+
+    <div class="container">
+        <h1>ToDo list <span class='icon-mobile'></span></h1>
+        <form>
+            <label>ToDo:
+                <input type="text" class="insert" placeholder="write here to add toDo"></label>
+            <button class="submit" type="submit">Add</button>
+        </form>
+
+        <section>
+            <div>
+                <h2>ToDo</h2>
+                <ul class="todo">
+                    <!-- <li>
+                        <span>id: </span>
+                        booom
+                        <span class="buttons">
+                            <button class="setDone icon-checkmark"></button>
+                            <button class="update icon-pencil"></button>
+                            <button class="remove icon-bin"></button>
+                            <button class="setUndone icon-undo"></button>
+                        </span>
+                    </li> -->
+                </ul>
+            </div>
+
+            <div>
+                <h2>Done</h2>
+                <ul class="done">
+                </ul>
+            </div>
+        </section>
+
+
+    </div>
+    <br></br>
+    <p>* to change something: hover on todo</p>
+    <p>* to update the content: type in input and then press the update button</p>
+
+
+
+    <script type="module" src="src/js/index.js"></script>
+
+</body>
+
+</html>

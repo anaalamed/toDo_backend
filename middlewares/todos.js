@@ -1,4 +1,4 @@
-const {getTodo} = require('../models/todos');
+const {getTodo} = require('../services/todos');
 
 // if user have permission to make changes on todo
 const CheckTodoPermission = async (req,res,next) => {

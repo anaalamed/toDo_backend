@@ -1,13 +1,8 @@
 // know to read arguments from terminal and decide what func start
-
-// const { addTodo, removeTodo, updateTodo, getTodos } = require('./todo-model');
-const model  = require('./services/todo-model');
-
+const model = require('./services/todo-model');
 
 module.exports = async function runCommand([_, __, action, data = '', extraData]) {
-
     // console.log(action, data, extraData);
-
     switch (action) {
         case 'get': print(data); break;
         case 'delete': remove(data); break;
@@ -30,7 +25,7 @@ async function print(filterStr) {
         filters.content = filterStr;
     }
 
-    const todos = await  model.getTodos(filters);
+    const todos = await model.getTodos(filters);
     console.table(todos);
 }
 
@@ -40,12 +35,12 @@ async function remove(id) {
 }
 
 async function add(content, extraData) {
-    const todo = await model.addTodo({content, isDone: extraData === 'done'});
+    const todo = await model.addTodo({ content, isDone: extraData === 'done' });
     console.table([todo]);
 }
 
 async function setDone(id, isDone) {
-    const updateTodo = await model.updateTodo(Number(id), {isDone });
+    const updateTodo = await model.updateTodo(Number(id), { isDone });
     console.table([updateTodo]);
 }
 

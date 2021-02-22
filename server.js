@@ -1,70 +1,32 @@
 const express = require('express'); // from node_modules
-const bodyParser = require('body-parser');
+const cors = require('cors');
+const morgan = require('morgan');
 
-const jsonParser = bodyParser.json();  // access to body and JSON it 
+const todosRouter = require('./routes/todos');
+const { checkUsersHeaders, checkExistingUser } = require('./middlewares/auth');
+const {connect} = require('./mongo-db');
 
-const modelTodo = require('./models/todos');
-// const modelUsers = require('./models/users');
-const {checkUsersHeaders, checkExistingUser} = require('./middlewares/auth');
-const {CheckTodoPermission} = require('./middlewares/todos');
+connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/todos')
+	.then(() => console.log('MONGODB is connected'))
+	.catch(() => {
+		console.log('MONGODB is not connected');
+		process.exit(1);
+	});
 
+const app = express();
 
-const app = express();  // create server
-
-
-//_________________________________________________________
-// ----------------------- middlewares --------------------
-//_________________________________________________________
-
+// middleware
+app.use(morgan('combined'));
+app.use(cors()); // add relevant headers 
 app.use(checkUsersHeaders); // if there is userId in headers
 app.use(checkExistingUser); // if there is user in db
 
+app.use(todosRouter);
 
-//_________________________________________________________
-// ----------------------- todos methods ------------------
-//_________________________________________________________
+// frontend from the internet 
+// app.use( express.static( __dirname + '/frontEnd'));
 
-// print
-app.get('/api/todos', async (req, res) => {
-    const filters = {
-        userId: req.user.id
-    };
-
-    if (req.query.isDone) {
-        filters.isDone = req.query.isDone === 'true';
-    }
-    if (req.query.content) {
-        filters.content = req.query.content;
-    }
-
-    const todos = await modelTodo.getTodos(filters);
-    // const todos = await modelTodo.getTodos();
-
-    res.json(todos);
-});
-
-// before delete and put: middleware check if user have permission
-app.delete('/api/todos/:id', CheckTodoPermission, async (req, res) => {
-    // await modelTodo.removeTodo(Number(req.params.id));
-    await modelTodo.removeTodo(req.todo.id);
-
-    res.json({ message: 'item deleted successfuly' });
-});
-
-// add todo.       
-app.post('/api/todos', jsonParser, async (req, res) => {
-    const todo = await modelTodo.addTodo({...req.body, isDone:false, userId: req.user.id});
-    res.json(todo);
-});
-
-// update todo
-app.put('/api/todos/:id', CheckTodoPermission, jsonParser, async (req, res) => {
-    const todo = await modelTodo.updateTodo(req.todo.id, req.body); // Number(req.params.id)
-    res.json(todo);
-});
-
-
-app.listen(3000, () => console.log('listening on http://localHost:3000'));
+app.listen(process.env.PORT || 3000, () => console.log('listening on http://localHost:3000'));
 
 
 
