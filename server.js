@@ -17,16 +17,16 @@ const app = express();
 
 // middleware
 app.use(morgan('combined'));
-app.use(cors()); // add relevant headers 
+app.use(cors()); // add relevant headers to enable domains acess it 
 app.use(checkUsersHeaders); // if there is userId in headers
 app.use(checkExistingUser); // if there is user in db
 
-app.use(todosRouter);
+app.use(todosRouter); // all endpoints from folder routes
 
 // frontend from the internet 
 // app.use( express.static( __dirname + '/frontEnd'));
 
-app.listen(process.env.PORT || 3000, () => console.log('listening on http://localHost:3000'));
+app.listen(process.env.PORT || 3001, () => console.log('listening on http://localHost:3001'));
 
 
 
@@ -40,31 +40,31 @@ app.listen(process.env.PORT || 3000, () => console.log('listening on http://loca
 
 
 
-//_______________________________________________________________
-// -------------------------- examples --------------------------
-//_______________________________________________________________
+// //_______________________________________________________________
+// // -------------------------- examples --------------------------
+// //_______________________________________________________________
 
-// ---------------------------- res.json ------------------------
-app.get('/hello', (req, res) => {
-    res.json({
-        a: 5,
-        b: 7,
-        hello: 'world'
-    })
-});
+// // ---------------------------- res.json ------------------------
+// app.get('/hello', (req, res) => {
+//     res.json({
+//         a: 5,
+//         b: 7,
+//         hello: 'world'
+//     })
+// });
 
-// ---------------------------- req.querry -----------------------
-app.get('/world', (req, res) => {
-    console.log(req.query); // q=....   on link
-    // res.send('world!');
-    res.json(req.query);
-});
+// // ---------------------------- req.querry -----------------------
+// app.get('/world', (req, res) => {
+//     console.log(req.query); // q=....   on link
+//     // res.send('world!');
+//     res.json(req.query);
+// });
 
-// ---------------------------- req.params -----------------------
-app.get('/api/shop/:category/:product', (req, res) => {
-    const { category, product } = req.params;
-    res.json(req.params);
-});
- // ________________________________________________________________
+// // ---------------------------- req.params -----------------------
+// app.get('/api/shop/:category/:product', (req, res) => {
+//     const { category, product } = req.params;
+//     res.json(req.params);
+// });
+//  // ________________________________________________________________
 
 

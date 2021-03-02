@@ -1,12 +1,20 @@
-require('./file-db');
+// stateless - no memory
+// statefull - memory - cash. next try bring from the memory 
+
+// require('./file-db');
 const { getData, setData } = require('../file-db');
 const Todo = require('../models/todo');
 
 const PATH = "todos.json";
 
 function addTodo(todo) {
-    const todo = new Todo(todo);
-    return todo.save();
+    // mongoose
+    // const newTodo = new Todo(todo); // assign obj according to schema
+    // return todo.save(); // save returns promise/async function. do insertOne
+
+    // mongo directly 
+    return Todo.insertOne(todo); // vallidation with schema
+    // return Todo.collection.insertOne(todo); // no vallidation with schema
 }
 
 async function removeTodo(id) {
@@ -14,11 +22,6 @@ async function removeTodo(id) {
     await setData(PATH, todos.filter(todo => todo.id !== id));
 }
 
-/**
- * 
- * @param {int} id 
- * @param {obj} changes 
- */
 async function updateTodo(id, changes = {}) {
     let todos = await getData(PATH);
     const todo = todos.find(todo => todo.id === id)
@@ -30,22 +33,22 @@ async function updateTodo(id, changes = {}) {
 
 function getTodos(filters = {}) {
     const querry = {};
-        if ('isDone' in filters) {
-            querry.isDone = filters.isDone;
-        }
-        if ('content' in filters) {
-            querry.content = new RegExp(filters.content, 'i');
-        }
-        if ('user' in filters) {
-            querry.user = filters.user;
-        }
-        return Todo.find(querry);
+    if ('isDone' in filters) {
+        querry.isDone = filters.isDone;
+    }
+    if ('content' in filters) {
+        querry.content = new RegExp(filters.content, 'i');
+    }
+    if ('user' in filters) {
+        querry.user = filters.user;
     }
 
+    return Todo.find(querry);
+}
 
+// user need to use await to use this function
 async function getTodo(id) {
-    const todos = await getData(PATH);
-    return todos.filter(todo => todo.id === id);
+    return Todo.findOne({_id = id }); // findOne returns promise
 }
 
 

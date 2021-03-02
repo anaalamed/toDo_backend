@@ -1,3 +1,6 @@
+// MODELS:  model of data - Schema (mongo)
+
+
 const mongoose = require('mongoose');
 // const { Schema, model } = require('mongoose');
 
@@ -14,7 +17,9 @@ const TodoSchema = new mongoose.Schema({
     },
     user: {
         type: ObjectId,
-        ref: 'user'
+        ref: 'user',
+        required: true,
+        index: true // save list of todos of each user. faster search in db  
     },
     created: {
         type: Date,

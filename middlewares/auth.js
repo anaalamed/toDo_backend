@@ -2,9 +2,9 @@ const modelUsers = require('../services/users');
 
 // if there is userId
 const checkUsersHeaders = (req, res, next) => {
-    if(req.headers.userid) {
+    if(req.headers.user) {
         // req.userId = Number(req.headers.userid); // go to the next function. server use lower case always
-        req.userId = req.headers.userid; // go to the next function. server use lower case always
+        req.userId = req.headers.user; // go to the next function. server use lower case always
         
         next();
     } else {
